@@ -1,3 +1,3 @@
-docker stop financas-api
-docker rm financas-api
-docker run -d --name financas-api -p 9000:9000 marcelobruckner/financas-api
+podman stop podman_financas
+podman rm podman_financas
+podman run -d --name podman_financas -p 8080:8080 marcelobruckner/financas-api

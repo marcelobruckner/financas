@@ -1,2 +1,2 @@
-mvn clean install
-docker build -t marcelobruckner/financas-api .
+podman build -t marcelobruckner/financas-api -f Containerfile
+#podman build -f Containerfile --tag docker.io/marcelobruckner/financas-api:2.0
