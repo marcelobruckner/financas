@@ -15,10 +15,10 @@ spec:
         app: financas-api
     spec:
       containers:
-      - image: docker.io/marcelobruckner/financas-api:2.0
+      - image: docker.io/marcelobruckner/financas-api:3.0
         name: financas-api
         ports:
-        - containerPort: 9000
+        - containerPort: 8080
         resources:
           limits:
             cpu: "0.5"
@@ -26,15 +26,15 @@ spec:
           requests:
             cpu: "0.25"
             memory: 128Mi
-#---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: financas-api
-# spec:
-#   selector:
-#     app: financas-api
-#   ports:
-#     - protocol: TCP
-#       port: 9000 # Porta do Service, que será mapeada para a porta 8080 do Pod
-#       targetPort: 9000 # Porta dos Pods
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: financas-api
+ spec:
+   selector:
+     app: financas-api
+   ports:
+     - protocol: TCP
+       port: 8080 # Porta do Service, que será mapeada para a porta 8080 do Pod
+       targetPort: 8080 # Porta dos Pods
