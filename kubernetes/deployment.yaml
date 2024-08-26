@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: financas-api
+  name: financas-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: financas-api
+  template:
+    metadata:
+      labels:
+        app: financas-api
+    spec:
+      containers:
+        - image: docker.io/marcelobruckner/financas-api:3.0
+          name: financas-api
+          ports:
+          - containerPort: 8080
+          resources:
+            limits:
+              cpu: "0.5"
+              memory: 256Mi
+            requests:
+              cpu: "0.25"
+              memory: 128Mi
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: financas-api
+spec:
+  selector:
+    app: financas-api
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
