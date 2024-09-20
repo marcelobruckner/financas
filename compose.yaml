@@ -1,35 +1,19 @@
 services:
-  financas-app:
-    image: "marcelobruckner/financas-api:3.2"
-    hostname: financas-app
-    environment:
-      - SERVER_PORT=8080
-      - DATABASE_URL=jdbc:mysql://db-mysql:3306/financas
-      - DATABASE_USERNAME=root
-      - DATABASE_PASSWORD=admin
-    depends_on:
-      db-mysql:
-        condition: service_healthy
-    restart: on-failure
-    ports:
-      - "8080:8080"
-    networks:
-      - financas-ntw
-
-  db-mysql:
-    image: "docker.io/mysql:9"
-    hostname: db-mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_PASSWORD=admin
-      - MYSQL_DATABASE=financas
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
+  mysql-db:
+    container_name: mysql-compose
+    image: "docker.io/marcelobruckner/mysql-personal-image:1.0"
     ports:
       - "3306:3306"
-    networks:
-      - financas-ntw    
-networks:
-  financas-ntw:    
+  
+  financas-app:
+    container_name: financas-api-compose
+    image: "marcelobruckner/financas-api:3.3"
+    environment:
+      - DATABASE_URL=jdbc:mysql://mysql-db:3306/financas
+      - DATABASE_USER=app-financas-user
+      - DATABASE_PASSWORD=app-financas-pass
+    depends_on:
+      - mysql-db
+    restart: always
+    ports:
+      - "8080:8080"
