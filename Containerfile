@@ -16,4 +16,4 @@ FROM registry.access.redhat.com/ubi8/openjdk-17-runtime
 #WORKDIR /home/jboss
 COPY --from=build /home/jboss/target/financas-0.0.1-SNAPSHOT.jar financas.jar
 EXPOSE 8080
-ENTRYPOINT exec java -jar financas.jar
+ENTRYPOINT ["java" "-jar" "financas.jar"]

@@ -1,40 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  labels: 
-    app: financas-api
-  name: financas-api
+  labels:
+    app: financas-deployment
+  name: financas-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: financas-api
+      app: financas-deployment
+  strategy: {}
   template:
     metadata:
       labels:
-        app: financas-api
+        app: financas-deployment
     spec:
       containers:
-      - image: docker.io/marcelobruckner/financas-api:3.0
+      - image: marcelobruckner/financas-api:3.3
         name: financas-api
         ports:
         - containerPort: 8080
-        resources:
-          limits:
-            cpu: "0.5"
-            memory: 256Mi
-          requests:
-            cpu: "0.25"
-            memory: 128Mi
----
- apiVersion: v1
- kind: Service
- metadata:
-   name: financas-api
- spec:
-   selector:
-     app: financas-api
-   ports:
-     - protocol: TCP
-       port: 8080 # Porta do Service, que será mapeada para a porta 8080 do Pod
-       targetPort: 8080 # Porta dos Pods
+        env:
+        - name: DATABASE_URL
+          value: "jdbc:mysql://mysql-service:3306/financas"
+        - name: DATABASE_USER
+          value: "app-financas-user"
+        - name: DATABASE_PASSWORD
+          value: "app-financas-pass"
