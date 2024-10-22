@@ -16,7 +16,7 @@ spec:
         app: financas-deployment
     spec:
       containers:
-      - image: marcelobruckner/financas-api:3.3
+      - image: marcelobruckner/financas-api:3.4
         name: financas-api
         ports:
         - containerPort: 8080
@@ -27,3 +27,39 @@ spec:
           value: "app-financas-user"
         - name: DATABASE_PASSWORD
           value: "app-financas-pass"
+        resources:
+          limits:
+            cpu: "0.75"
+            memory: 512Mi
+          requests:
+            cpu: "0.50"
+            memory: 256Mi
+        #livenessProbe:
+        #  httpGet:
+        #    path: /
+        #    port: 8080
+        #  initialDelaySeconds: 10
+        #  periodSeconds: 10
+        #  timeoutSeconds: 5
+        #  successThreshold: 1
+        #  failureThreshold: 3
+        #readinessProbe: # Onde definimos a nossa probe de prontidão
+        #  httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
+        #    path: / # O caminho que iremos testar
+        #    port: 8080 # A porta que iremos testar
+        #  initialDelaySeconds: 10 # O tempo que iremos esperar para executar a primeira vez a probe
+        #  periodSeconds: 10 # De quanto em quanto tempo iremos executar a probe
+        #  timeoutSeconds: 5 # O tempo que iremos esperar para considerar que a probe falhou
+        #  successThreshold: 1 # O número de vezes que a probe precisa passar para considerar que o container está pronto
+        #  failureThreshold: 3 # O número de vezes que a probe precisa falhar para considerar que o container não está pronto
+        #startupProbe: # Onde definimos a nossa probe de inicialização
+        #  exec: # O tipo exec é utilizado quando queremos executar algo dentro do container.
+        #    command: # Onde iremos definir qual comando iremos executar
+        #      - curl
+        #      - -f
+        #      - http://localhost:8080/
+        #  initialDelaySeconds: 20 # O tempo que iremos esperar para executar a primeira vez a probe
+        #  periodSeconds: 10 # De quanto em quanto tempo iremos executar a probe
+        #  timeoutSeconds: 5 # O tempo que iremos esperar para considerar que a probe falhou
+        #  successThreshold: 1 # O número de vezes que a probe precisa passar para considerar que o container está pronto
+        #  failureThreshold: 1 # O número de vezes que a probe precisa falhar para considerar que o container não está pronto  
