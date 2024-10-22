@@ -7,7 +7,7 @@ services:
   
   financas-app:
     container_name: financas-api-compose
-    image: "marcelobruckner/financas-api:3.3"
+    image: "marcelobruckner/financas-api:3.5"
     environment:
       #- DATABASE_URL=jdbc:mysql://mysql-db:3306/financas
       - DATABASE_URL=jdbc:mysql://mysql-compose:3306/financas
