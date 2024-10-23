@@ -9,24 +9,40 @@ spec:
   selector:
     matchLabels:
       app: financas-deployment
-  strategy: {}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   template:
     metadata:
       labels:
         app: financas-deployment
     spec:
       containers:
-      - image: marcelobruckner/financas-api:3.5
+      - image: marcelobruckner/financas-api:3.6
         name: financas-api
         ports:
         - containerPort: 8080
+        
         env:
         - name: DATABASE_URL
-          value: "jdbc:mysql://mysql-service:3306/financas"
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret 
+              key: database-url
+
         - name: DATABASE_USER
-          value: "app-financas-user"
+          valueFrom: 
+            secretKeyRef:
+              name: mysql-secret
+              key: database-user
+
         - name: DATABASE_PASSWORD
-          value: "app-financas-pass"
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: database-password
         resources:
           limits:
             cpu: "0.75"
@@ -34,21 +50,15 @@ spec:
           requests:
             cpu: "0.50"
             memory: 256Mi
-        #livenessProbe:
-          #tcpSocket:
-          #  port: 8080
-          #initialDelaySeconds: 25
-          #periodSeconds: 5
-          #timeoutSeconds: 5
-          #failureThreshold: 3
         livenessProbe: # Aqui é onde vamos adicionar a nossa livenessProbe
           httpGet: # Aqui vamos utilizar o httpGet, onde vamos se conectar ao container através do protocolo HTTP
             path: /actuator/health # Qual o endpoint que vamos utilizar para se conectar ao container
             port: 8080 # Qual porta TCP vamos utilizar para se conectar ao container
-          initialDelaySeconds: 25 # Quantos segundos vamos esperar para executar a primeira verificação
-          periodSeconds: 5 # A cada quantos segundos vamos executar a verificação
-          timeoutSeconds: 5 # Quantos segundos vamos esperar para considerar que a verificação falhou
+          initialDelaySeconds: 40 # Quantos segundos vamos esperar para executar a primeira verificação
+          periodSeconds: 15 # A cada quantos segundos vamos executar a verificação
+          timeoutSeconds: 15 # Quantos segundos vamos esperar para considerar que a verificação falhou
           failureThreshold: 3 # Quantos falhas consecutivas vamos aceitar antes de reiniciar o container
+          successThreshold: 1
         #readinessProbe: # Onde definimos a nossa probe de prontidão
         #  httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
         #    path: / # O caminho que iremos testar
