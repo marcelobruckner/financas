@@ -1,1 +1,1 @@
-docker build -t marcelobruckner/financas-api:3.4 .
+docker build -t marcelobruckner/financas-api:3.6 .
