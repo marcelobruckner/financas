@@ -1,11 +1,11 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  generateName: clone-read-run-financas
+  generateName: clone-read-run-
   namespace: tekton-pipelines
 spec:
   pipelineRef:
-    name: financas-clone-read
+    name: clone-read
   podTemplate:
     securityContext:
       fsGroup: 65532
@@ -20,4 +20,4 @@ spec:
               storage: 1Gi
   params:
     - name: repo-url
-      value: https://github.com/marcelobruckner/financas.git
+      value: https://github.com/marcelobruckner/financas
