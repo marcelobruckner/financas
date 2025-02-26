@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: show-dockerfile
+spec:
+  description: Read and display dockerfile file.
+  workspaces:
+  - name: source
+  steps:
+  - name: read
+    image: alpine:latest
+    script: | 
+      #!/usr/bin/env sh
+       #!/bin/sh
+        set -e
+        echo "Iniciando listagem de arquivos..."
+        ls -lah $(workspaces.source.path)  # Lista os arquivos para verificar se o Dockerfile está lá

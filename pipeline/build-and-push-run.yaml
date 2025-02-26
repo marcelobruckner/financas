@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: build-and-push-run
+spec:
+  pipelineRef:
+    name: build-and-push-pipeline
+  params:
+    - name: repo-url
+      value: "https://github.com/marcelobruckner/financas.git"
+    - name: image-url
+      value: "docker.io/marcelobruckner/financas-api:latest"
+  workspaces:
+    - name: shared-data
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi

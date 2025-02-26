@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build-push
+spec:
+  params:
+    - name: image-url
+      type: string
+  workspaces:
+    - name: source
+  steps:
+    - name: buildah-build
+      image: quay.io/buildah/stable
+      env:
+        - name: STORAGE_DRIVER
+          value: vfs
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Verificando arquivos no diretório de build..."
+        ls -lah $(workspaces.source.path)/repo
+
+        echo "Construindo imagem..."
+        buildah --storage-driver=vfs bud -t $(params.image-url) $(workspaces.source.path)/repo
+
+        echo "Autenticando no Docker Hub..."
+        buildah login -u $(cat /secrets/username) -p $(cat /secrets/password) docker.io
+
+        echo "Enviando imagem..."
+        buildah --storage-driver=vfs push $(params.image-url) docker://$(params.image-url)
+      volumeMounts:
+        - name: docker-credentials
+          mountPath: /secrets
+          readOnly: true
+  volumes:
+    - name: docker-credentials
+      secret:
+        secretName: dockerhub-secret

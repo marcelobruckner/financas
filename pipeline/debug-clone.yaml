@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: debug-clone
+spec:
+  workspaces:
+    - name: source
+  steps:
+    - name: list-files
+      image: busybox
+      script: |
+        #!/bin/sh
+        echo "Iniciando listagem de arquivos da pasta $(workspaces.source.path)/repo"
+        ls -lah $(workspaces.source.path)/repo
