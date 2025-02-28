@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: task-echo
+  namespace: tekton-builds
+spec:
+  workspaces:
+    - name: source
+  params:
+    - name: message
+      type: string
+  steps:
+    - name: sleep
+      image: alpine:latest
+      command: [echo]
+      args: ["$(params.message)"]
