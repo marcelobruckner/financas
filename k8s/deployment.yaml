@@ -2,28 +2,31 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: financas-deployment
-  name: financas
+    app: financas-api
+  name: financas-api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: financas-deployment
+      app: financas-api
   strategy:
-    type: RollingUpdate
     rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
   template:
     metadata:
       labels:
-        app: financas-deployment
+        app: financas-api
     spec:
       containers:
-        - image: default-route-openshift-image-registry.apps-crc.testing/financas/financas-api:latest
+        - image: image-registry.openshift-image-registry.svc:5000/financas/financas-api:latest
           name: financas-api
           ports:
             - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8443
+              protocol: TCP
           resources:
             limits:
               cpu: "0.75"

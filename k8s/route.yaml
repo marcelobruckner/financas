@@ -1,15 +1,17 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: financas-deployment
   labels:
-    app: financas-deployment
+    app: financas-api
+  name: financas-api
 spec:
-  to:
-    kind: Service
-    name: financas-deployment
+  host: financas-api-financas.apps-crc.testing
   port:
-    targetPort: 8080
+    targetPort: 8080-tcp
   tls:
     termination: edge
+  to:
+    kind: Service
+    name: financas-api
+    weight: 100
   wildcardPolicy: None
