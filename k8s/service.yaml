@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: financas-api
+  name: financas-api
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8080 # Porta do Service, que será mapeada para a porta 8080 do Pod
+      targetPort: 8080 # Porta dos Pods
+  selector:
+    app: financas-api

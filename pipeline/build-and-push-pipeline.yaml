@@ -20,24 +20,24 @@ spec:
       workspaces:
         - name: output
           workspace: shared-data
-    
-    - name: debug-clone
-      taskRef:
-        name: debug-clone
-      workspaces:
-        - name: source
-          workspace: shared-data
-      runAfter:
-        - clone-repo
+
+    #    - name: debug-clone
+    #      taskRef:
+    #        name: debug-clone
+    #      workspaces:
+    #        - name: source
+    #          workspace: shared-data
+    #      runAfter:
+    #        - clone-repo
 
     - name: build-and-push
       taskRef:
         name: build-push
+      runAfter:
+        - clone-repo
       params:
         - name: image-url
           value: "$(params.image-url)"
       workspaces:
         - name: source
           workspace: shared-data
-      runAfter:
-        - debug-clone
