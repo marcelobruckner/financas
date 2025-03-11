@@ -71,13 +71,13 @@ spec:
           workspace: shared-workspace
       runAfter:
         - build-image
-#    - name: update-deployment
-#      taskRef:
-#        name: update-deployment
-#      params:
-#        - name: deployment
-#          value: $(params.deployment-name)
-#        - name: IMAGE
-#          value: $(params.IMAGE)
-#      runAfter:
-#        - apply-manifests
+    - name: update-deployment
+      taskRef:
+        name: update-deployment
+      params:
+        - name: deployment
+          value: $(params.deployment-name)
+        - name: IMAGE
+          value: $(params.IMAGE)
+      runAfter:
+        - apply-manifests
