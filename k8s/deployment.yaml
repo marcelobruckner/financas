@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: financas-deployment
-  name: financas-deployment
+  name: financas
 spec:
   replicas: 1
   selector:
