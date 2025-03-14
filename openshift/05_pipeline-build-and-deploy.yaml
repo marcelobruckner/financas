@@ -21,7 +21,11 @@ spec:
     - name: IMAGE
       type: string
       description: image to be build from the code
-      default: image-registry.openshift-image-registry.svc:5000/financas/financas-api:latest
+      default: image-registry.openshift-image-registry.svc:5000/financas/financas-api
+    - name: release-number
+      type: string
+      description: release number to be used in the image
+      default: "latest"
   tasks:
     - name: fetch-repository
       taskRef:
@@ -45,6 +49,16 @@ spec:
           value: "true"
         - name: REVISION
           value: $(params.git-revision)
+
+    - name: image-release
+      taskRef:
+        name: image-release
+      workspaces:
+        - name: output
+          workspace: shared-workspace
+      runAfter:
+        - fetch-repository
+
     - name: build-image
       taskRef:
         resolver: cluster
@@ -57,12 +71,12 @@ spec:
             value: openshift-pipelines
       params:
         - name: IMAGE
-          value: $(params.IMAGE)
+          value: $(params.IMAGE):$(tasks.image-release.results.release-number)
       workspaces:
         - name: source
           workspace: shared-workspace
       runAfter:
-        - fetch-repository
+        - image-release
     - name: apply-manifests
       taskRef:
         name: apply-manifests
@@ -71,6 +85,7 @@ spec:
           workspace: shared-workspace
       runAfter:
         - build-image
+
     - name: update-deployment
       taskRef:
         name: update-deployment
