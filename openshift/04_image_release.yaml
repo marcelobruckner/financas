@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: image-release
+spec:
+  workspaces:
+    - name: output
+  results:
+    - name: release-number
+      description: "The release number generated"
+  steps:
+    - name: release
+      image: alpine:latest
+      script: |
+        #!/bin/sh
+        set -e
+        echo "Gerando release number"
+        DATA=$(date "+%d%m%Y%H%M%S")
+        echo -n "$DATA" > $(results.release-number.path)
