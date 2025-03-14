@@ -4,11 +4,15 @@ FROM registry.access.redhat.com/ubi8/openjdk-17 AS build
 # Definir diretório de trabalho
 WORKDIR /home/jboss
 
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+
 # Copiar o código e ajustar as permissões
-COPY --chown=jboss:jboss . .
+COPY --chown=jboss:jboss src ./src
 
 # Executar o Maven para empacotar o projeto, ignorando os testes
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
 
 # Etapa 2: Imagem final para execução
 FROM registry.access.redhat.com/ubi8/openjdk-17-runtime
